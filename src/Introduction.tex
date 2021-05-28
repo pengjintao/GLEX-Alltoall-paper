@@ -39,7 +39,7 @@ Many parallel applications may suffer from global communication.
 Especially for communication-intensive applications, their time-to-solution and scalablily may be affected by global communication. 
 Message Passing Interface (MPI) provides a set of commonly used collective communication.
 MPI\_Alltoall is one of the collective communication where each process will send a different message to all processes.
-It is broadly used in some parallel applications like Fast Fourier Transform (FFT) and graph computing.
+It is broadly used in some parallel applications like Fast Fourier Transform (FFT) \cite{mehta2021parallel} and graph computing.
 However, each time we double the processes, the all-to-all communication workload is quadrupled.
 On mordern supercomputers, network throughput has a linear relationship with the number of nodes.
 This brings great challenges to large-scale all-to-all communications.
@@ -52,6 +52,21 @@ The size of the message is increased by $M^N$ times, which makes effective use o
 In the current supercomputer, a node has multiple CPU cores, NUMA and network endpoints.
 This architecture brings 4 kinds of parallism to optimize a node-aware all-to-all method:
 \begin{enumerate}[(1)]
-\item 
-\item Use footnotes to indicate the affiliations.
+\item Multiple network endpoints can simultaneously process multiple communication requests.
+\item Processes in different NUMA can simultaneously access it local memory without contention.
+\item Multiple processes can simultaneously gather/scatter data and compose communication requests.
+\item Inter-node communication can be overlapped with intra-node communication.
 \end{enumerate}
+As we known, no methods combine these parallism togather to improve a node-aware all-to-all collective communication. 
+
+% A typical intra-node communication is based on shared memory.
+% Processes create a shared memory at initialization stage, the data is fistly copied from senders buffer into the shared memory buffer, then copied out to the receivers buffer.
+% Two data copy needed to transer a intra-node message.
+% To reduce the memory copy times, kernel-assisted communication, shared heaps, and thread-based MPI are proposed.
+
+In this paper, we proposed a multi-leader node-aware all-to-all method.
+It using multiple leaders on different NUMA which open the different network endpoints to gather/scatter data, compose communication requests, and transpose local matrix.
+It explore the parallelism existing in mordern multi-core processor with NUMA memory architecture and multi-port network.
+For intra-node gather/sactter, we proposed a shared-heap-based remote accessible memory which similar to intra-node MPI RMA.
+Inter-node communication is based on Remote Direct Memory Access (RDMA) which provide high throughput and low latency.
+The results show that, compared to MPI\_alltoall, our implementation achieves up to 20x speedup and 4x speedup on average. 

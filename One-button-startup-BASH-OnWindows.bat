@@ -7,6 +7,7 @@ del *.fls
 del *.fdb_latexmk
 del *.synctex*
 del *.out
+del *.spl
 
 
 pdflatex main.tex
@@ -24,3 +25,4 @@ del *.fls
 del *.fdb_latexmk
 del *.synctex*
 del *.out
+del *.spl

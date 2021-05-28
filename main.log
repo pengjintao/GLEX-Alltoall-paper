@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/W32TeX) (preloaded format=pdflatex 2018.8.13)  28 MAY 2021 11:16
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/W32TeX) (preloaded format=pdflatex 2018.8.13)  28 MAY 2021 20:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -87,7 +87,7 @@ File: upsy.fd 2001/06/04 font definitions for U/psy.
 \@enLab=\toks16
 \@sep=\skip43
 \@@sep=\skip44
- (./main.spl)
+
 (d:/texlive/2015/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip45
@@ -339,13 +339,14 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 82.
 )
 \Hy@SectionHShift=\skip47
-) (./main.aux)
+)
+No file main.aux.
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/txmi/m/it on input line 40.
 LaTeX Font Info:    Try loading font information for OML+txmi on input line 40.
 
- (d:/texlive/2015/texmf-dist/tex/latex/txfonts/omltxmi.fd
+(d:/texlive/2015/texmf-dist/tex/latex/txfonts/omltxmi.fd
 File: omltxmi.fd 2000/12/15 v3.1
 )
 LaTeX Font Info:    ... okay on input line 40.
@@ -369,167 +370,4 @@ LaTeX Font Info:    Try loading font information for OMX+txex on input line 40.
 File: omxtxex.fd 2000/12/15 v3.1
 )
 LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for U/txexa/m/n on input line 40.
-LaTeX Font Info:    Try loading font information for U+txexa on input line 40.
-
-(d:/texlive/2015/texmf-dist/tex/latex/txfonts/utxexa.fd
-File: utxexa.fd 2000/12/15 v3.1
-)
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 40.
-LaTeX Font Info:    ... okay on input line 40.
-LaTeX Font Info:    Try loading font information for OT1+txr on input line 40.
-
-(d:/texlive/2015/texmf-dist/tex/latex/txfonts/ot1txr.fd
-File: ot1txr.fd 2000/12/15 v3.1
-)
-(d:/texlive/2015/texmf-dist/tex/context/base/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count115
-\scratchdimen=\dimen127
-\scratchbox=\box31
-\nofMPsegments=\count116
-\nofMParguments=\count117
-\everyMPshowfont=\toks19
-\MPscratchCnt=\count118
-\MPscratchDim=\dimen128
-\MPnumerator=\count119
-\makeMPintoPDFobject=\count120
-\everyMPtoPDFconversion=\toks20
-) (d:/texlive/2015/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
-Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
-
-(d:/texlive/2015/texmf-dist/tex/latex/oberdiek/grfext.sty
-Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
-)
-Package grfext Info: Graphics extension search list:
-(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
-G,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 452.
-
-(d:/texlive/2015/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
-e
-))
-*geometry* driver: auto-detecting
-*geometry* detected driver: pdftex
-*geometry* verbose mode - [ preamble ] result:
-* driver: pdftex
-* paper: custom
-* layout: <same size as paper>
-* layoutoffset:(h,v)=(0.0pt,0.0pt)
-* hratio: 1:1
-* vratio: 1:1
-* modes: 
-* h-part:(L,W,R)=(37.75394pt, 522.0pt, 37.75394pt)
-* v-part:(T,H,B)=(81.52342pt, 682.0pt, 81.52342pt)
-* \paperwidth=597.50787pt
-* \paperheight=845.04684pt
-* \textwidth=522.0pt
-* \textheight=682.0pt
-* \oddsidemargin=-34.51605pt
-* \evensidemargin=-34.51605pt
-* \topmargin=-52.74657pt
-* \headheight=50.0pt
-* \headsep=12.0pt
-* \topskip=10.0pt
-* \footskip=18.0pt
-* \marginparwidth=65.0pt
-* \marginparsep=11.0pt
-* \columnsep=18.0pt
-* \skip\footins=24.0pt plus 2.0pt minus 12.0pt
-* \hoffset=0.0pt
-* \voffset=0.0pt
-* \mag=1000
-* \@twocolumntrue
-* \@twosidefalse
-* \@mparswitchfalse
-* \@reversemarginfalse
-* (1in=72.27pt=25.4mm, 1cm=28.453pt)
-
-\AtBeginShipoutBox=\box32
-Package hyperref Info: Link coloring OFF on input line 40.
-(d:/texlive/2015/texmf-dist/tex/latex/hyperref/nameref.sty
-Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
-
-(d:/texlive/2015/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
-)
-\c@section@level=\count121
-)
-LaTeX Info: Redefining \ref on input line 40.
-LaTeX Info: Redefining \pageref on input line 40.
-LaTeX Info: Redefining \nameref on input line 40.
-
-(./main.out) (./main.out)
-\@outlinefile=\write4
-\openout4 = `main.out'.
-
-LaTeX Font Info:    Try loading font information for U+txmia on input line 68.
-
-(d:/texlive/2015/texmf-dist/tex/latex/txfonts/utxmia.fd
-File: utxmia.fd 2000/12/15 v3.1
-)
-LaTeX Font Info:    Try loading font information for U+txsya on input line 68.
-
-(d:/texlive/2015/texmf-dist/tex/latex/txfonts/utxsya.fd
-File: utxsya.fd 2000/12/15 v3.1
-)
-LaTeX Font Info:    Try loading font information for U+txsyb on input line 68.
-
-(d:/texlive/2015/texmf-dist/tex/latex/txfonts/utxsyb.fd
-File: utxsyb.fd 2000/12/15 v3.1
-)
-LaTeX Font Info:    Try loading font information for U+txsyc on input line 68.
-
-(d:/texlive/2015/texmf-dist/tex/latex/txfonts/utxsyc.fd
-File: utxsyc.fd 2000/12/15 v3.1
-) (./Introduction.tex
-LaTeX Font Info:    Try loading font information for OT1+txss on input line 1.
-
-(d:/texlive/2015/texmf-dist/tex/latex/txfonts/ot1txss.fd
-File: ot1txss.fd 2000/12/15 v3.1
-)
-LaTeX Font Info:    Font shape `OT1/txss/m/n' will be
-(Font)              scaled to size 4.74998pt on input line 1.
-) (./main.bbl
-Missing character: There is no â in font txr!
-Missing character: There is no € in font txr!
-Missing character: There is no “ in font txr!
-)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 94.
-
-[1{d:/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
-
-
-]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 94.
- (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 94.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 94.
-Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 7BC8208568B4C4431E8834C734C278FD;148.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 94.
- ) 
-Here is how much of TeX's memory you used:
- 7092 strings out of 494948
- 100518 string characters out of 6179769
- 188687 words of memory out of 5000000
- 10204 multiletter control sequences out of 15000+600000
- 37934 words of font info for 93 fonts, out of 8000000 for 9000
- 36 hyphenation exceptions out of 8191
- 34i,7n,30p,692b,334s stack positions out of 5000i,500n,10000p,200000b,80000s
-{d:/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}<d:/texlive/2015/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb><d:/texlive/2015/texmf-dist/fon
-ts/type1/public/txfonts/rtxr.pfb><d:/texlive/2015/texmf-dist/fonts/type1/public
-/txfonts/txsy.pfb><d:/texlive/2015/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.p
-fb><d:/texlive/2015/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><d:/texlive/201
-5/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><d:/texlive/2015/texmf-dist/fonts
-/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (1 page, 59150 bytes).
-PDF statistics:
- 73 PDF objects out of 1000 (max. 8388607)
- 62 compressed objects within 1 object stream
- 16 named destinations out of 1000 (max. 500000)
- 25 words of extra memory for PDF output out of 10000 (max. 10000000)
-
+LaTeX Font Info:    Chec

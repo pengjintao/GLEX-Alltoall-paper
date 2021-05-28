@@ -57,7 +57,13 @@
 
 
 \begin{abstract}
-		All-to-all communication is commonly used in parallel applications like FFT. In mordern supercomputers, there are multiple cores, NUMAs and network endpoints. These features bring much parallelism. However, there is no method which makes uses the parallelism to improve the all-to-all communication. In this paper, we introduce an optimized multi-leader all-to-all library which explore the parallelism on network, CPU cores and overlap the intra- and inter-node communication. The results show that, compared to MPI, our library achieves up to 20x speedup and 4x speedup on average. For application, our method achieves up to 1.75x speedup on peak performance for 16384 cores.
+		All-to-all communication is commonly used in parallel applications like FFT. 
+		In mordern supercomputers, there are multiple cores, NUMAs and network endpoints. 
+		These features bring much parallelism. 
+		However, there is no method which makes uses the parallelism to improve the all-to-all communication. 
+		In this paper, we introduce an optimized multi-leader all-to-all library which explore the parallelism on network, CPU cores and overlap the intra- and inter-node communication. 
+		The results show that, compared to MPI, our library achieves up to 20x speedup. 
+		For application, our method achieves up to 1.75x speedup on peak performance for 16384 cores.
 \end{abstract}
 
 \begin{keyword}
@@ -69,7 +75,8 @@
 
 \linenumbers
 
-\input{Introduction.tex}
+\input{./src/Introduction.tex}
+\input{./src/Relatedwork.tex}
 
 
 \section{Front matter}
