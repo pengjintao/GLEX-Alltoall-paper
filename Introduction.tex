@@ -8,6 +8,7 @@
 
 %典型的方法是在节点内进行聚合消息然后在节点间传输数据。
 %简单的说就是将MPI_alltoall替换为n次gather+节点间alltoall+n次scatter。
+%该方法对于小消息非常有效。
 %通过这种方法消息数量降低节点内进程数量的平方倍。
 %在当前超级计算机结构下，有4种并行性有助于优化该节点感知的all-to-all的通信性能：
 %多个网络端口使得网卡可以同时处理多个通信请求。
@@ -24,3 +25,33 @@
 %但是这些方法并没有考虑到随着超级计算机的发展，节点间通信并不会比节点内通信慢太多。
 %现代超级计算机普遍装备着多核心，多numa的处理器。
 %典型的方法通常没有将这其中的并行性发掘出来。
+
+%本文提出了一种多leader的节点感知all-to-all通信库。
+%利用多个核心进行本地转置，发掘多核并行。
+%使用多核CPU核心同时进行Gather和Scatter操作，发掘多NUMA并行访存。
+%利用多个网络端口同时进行消息传输，发掘网络并行行。
+%将节点内和节点间数据传输重叠起来，提升大消息通信性能。
+%该通信库在节点内使用共享堆作为Gather和Scatter操作的基础。
+%在节点间使用RDMA进行网络通信。
+%实验表明，对于16384个进程，我们的通信库对比MPI可以实现最大10X的性能提升。从小消息到大消息平均可提升4.16倍。
+
+Many parallel applications may suffer from global communication.
+Especially for communication-intensive applications, their time-to-solution and scalablily may be affected by global communication. 
+Message Passing Interface (MPI) provides a set of commonly used collective communication.
+MPI\_Alltoall is one of the collective communication where each process will send a different message to all processes.
+It is broadly used in some parallel applications like Fast Fourier Transform (FFT) and graph computing.
+However, each time we double the processes, the all-to-all communication workload is quadrupled.
+On mordern supercomputers, network throughput has a linear relationship with the number of nodes.
+This brings great challenges to large-scale all-to-all communications.
+
+For multiple-core processes, a effective way is node-aware all-to-all method.
+It's replace a N nodes global all-to-all into N-1 times intra-node gather + inter-node all-to-all  + N-1 times intra-node gather.
+This method is very effective for small messages.
+Because, compared to original method, a node-aware all-to-all reduce the number of messages by $M^N$ times (M is number of processers in each nodes).
+The size of the message is increased by $M^N$ times, which makes effective use of the network bandwidth.
+In the current supercomputer, a node has multiple CPU cores, NUMA and network endpoints.
+This architecture brings 4 kinds of parallism to optimize a node-aware all-to-all method:
+\begin{enumerate}[(1)]
+\item 
+\item Use footnotes to indicate the affiliations.
+\end{enumerate}
