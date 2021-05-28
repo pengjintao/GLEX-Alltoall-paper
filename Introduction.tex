@@ -7,31 +7,20 @@
 %这给大规模all-to-all通信带来巨大的挑战。
 
 %典型的方法是在节点内进行聚合消息然后在节点间传输数据。
+%简单的说就是将MPI_alltoall替换为n次gather+节点间alltoall+n次scatter。
 %通过这种方法消息数量降低节点内进程数量的平方倍。
-%在节点内的的典型方法有共享内存。
+%在当前超级计算机结构下，有4种并行性有助于优化该节点感知的all-to-all的通信性能：
+%多个网络端口使得网卡可以同时处理多个通信请求。
+%多个内存控制器/NUMA/内存通道，带来的访存并行性。
+%多核心带来的通信请求构造数据Gather和Scatter的并行性。
+%节点内和节点间数据传输的并行性。
+%但是据我们所知，没有一种节点感知的all-to-all方法充分发掘了这四种并行性。
+
+%在节点内，优化节点感知的all-to-all通信算法在节点内的典型方法有共享内存。
 %该方法能够使得节点内通信绕过网卡进行。
 %此外，内核辅助的“零拷贝”技术以及共享堆的也是常见的方法。
 %这些方法能够降低一次点内的内存拷贝次数。
-%同时也有一些方法考虑到了numa中的cache利用效率的问题。
+%同时也有一些方法考虑到了NUMA/UMA中的cache利用效率的问题。
 %但是这些方法并没有考虑到随着超级计算机的发展，节点间通信并不会比节点内通信慢太多。
 %现代超级计算机普遍装备着多核心，多numa的处理器。
 %典型的方法通常没有将这其中的并行性发掘出来。
-
-%另一方面，在超级计算机使用的网卡上，通常有多个网络端口。这使得网络具有能够同时处理多个通信请求的能力。
-%并且现代高性能计算机的网络通常是分层网络，即下层网络带宽之和大于上层网络带宽。
-%传统的多端口all-to-all算法通常没有利用到NUMA传输的并发能力。
-%
-\paragraph{Installation} If the document class \emph{elsarticle} is not available on your computer, you can download and install the system package \emph{texlive-publishers} (Linux) or install the \LaTeX\ package \emph{elsarticle} using the package manager of your \TeX\ installation, which is typically \TeX\ Live or Mik\TeX.
-
-\paragraph{Usage} Once the package is properly installed, you can use the document class \emph{elsarticle} to create a manuscript. Please make sure that your manuscript follows the guidelines in the Guide for Authors of the relevant journal. It is not necessary to typeset your manuscript in exactly the same way as an article, unless you are submitting to a camera-ready copy (CRC) journal.
-
-\paragraph{Functionality} The Elsevier article class is based on the standard article class and supports almost all of the functionality of that class. In addition, it features commands and options to format the
-\begin{itemize}
-\item document style
-\item baselineskip
-\item front matter
-\item keywords and MSC codes
-\item theorems, definitions and proofs
-\item lables of enumerations
-\item citation style and labeling.
-\end{itemize}
