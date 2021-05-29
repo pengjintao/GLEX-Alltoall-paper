@@ -39,16 +39,16 @@ Many parallel applications may suffer from global communication.
 Especially for communication-intensive applications, their time-to-solution and scalablily may be affected by global communication. 
 Message Passing Interface (MPI) provides a set of commonly used collective communication.
 MPI\_Alltoall is one of the collective communication where each process will send a different message to all processes.
-It is broadly used in some parallel applications like Fast Fourier Transform (FFT) \cite{mehta2021parallel} and graph computing.
+It is broadly used in some parallel applications like Fast Fourier Transform (FFT) \cite{mehta2021parallel} and some graph algorithms like MapReduce \cite{plimpton2011mapreduce} and Breadth-first search (BFS) \cite{ueno2012highly}.
 However, each time we double the processes, the all-to-all communication workload is quadrupled.
 On mordern supercomputers, network throughput has a linear relationship with the number of nodes.
 This brings great challenges to large-scale all-to-all communications.
 
-For multiple-core processes, a effective way is node-aware all-to-all method.
-It's replace a N nodes global all-to-all into N-1 times intra-node gather + inter-node all-to-all  + N-1 times intra-node gather.
+For multiple-core processes, an effective way is node-aware all-to-all method \cite{sistare1999optimization}.
+It's replace a N nodes global all-to-all into N-1 times intra-node gather + local transpose + inter-node transpose + N-1 times intra-node gather.
 This method is very effective for small messages.
-Because, compared to original method, a node-aware all-to-all reduce the number of messages by $M^N$ times (M is number of processers in each nodes).
-The size of the message is increased by $M^N$ times, which makes effective use of the network bandwidth.
+Because, compared to original method, a node-aware all-to-all reduce the number of inter-node messages from $(M^N)^2$ to $N^2$ times (M is number of processers in each nodes).
+The size of the message is increased by $M^2$ times, which makes effective use of the network bandwidth.
 In the current supercomputer, a node has multiple CPU cores, NUMA and network endpoints.
 This architecture brings 4 kinds of parallism to optimize a node-aware all-to-all method:
 \begin{enumerate}[(1)]

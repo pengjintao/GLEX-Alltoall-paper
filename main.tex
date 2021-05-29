@@ -41,7 +41,7 @@
 
 \begin{frontmatter}
 
-\title{GLEX-Alltoall: Multi-leader All-to-all Communication on Multi-core Supercomputer}
+\title{GLEX-Alltoall: gather-scatter-based multi-leader All-to-all Communication on Multi-core Supercomputer}
 
 %% Group authors per affiliation:
 \author{Jintao Peng\fnref{pjtnote}}
@@ -61,7 +61,7 @@
 		In mordern supercomputers, there are multiple cores, NUMAs and network endpoints. 
 		These features bring much parallelism. 
 		However, there is no method which makes uses the parallelism to improve the all-to-all communication. 
-		In this paper, we introduce an optimized multi-leader all-to-all library which explore the parallelism on network, CPU cores and overlap the intra- and inter-node communication. 
+		In this paper, we introduce an optimized NUMA-aware multi-leader all-to-all library which explore the parallelism on network, CPU cores and overlap the intra- and inter-node communication. 
 		The results show that, compared to MPI, our library achieves up to 20x speedup. 
 		For application, our method achieves up to 1.75x speedup on peak performance for 16384 cores.
 \end{abstract}
