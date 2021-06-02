@@ -1,0 +1,20 @@
+\section {Experimental Platforms}
+The methods in this paper are validated on four different systems:
+\begin{enumerate}[(1)]
+\item HPC-A: Matrix-2000+ CPU, Tianhe series network.
+\item HPC-B: FT-2000+ CPU, Tianhe series network.
+\item HPC-C: Intel E5 CPU, Tianhe series network. 
+\item HPC-D: E5-2692 v2 * 2, Tianhe series network. 
+\end{enumerate}
+The Stream bandwidth test results are shown in the Table \ref{Memorybandwidth}.
+\begin{table}[]
+    \caption{Memory Bandwidth tested by Stream}\label{Memorybandwidth}
+\begin{tabular}{|l|c|c|}
+\hline
+\begin{tabular}[c]{@{}l@{}}Memory Bandwidth\\ tests (MB/s)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Copy\\ (Single-thread)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Copy\\ (Multi-threads)\end{tabular} \\ \hline
+HPC-A (32 threads)                                                      &                                                                &                                                                \\ \hline
+HPC-B (32 threads)                                                      &                                                                &                                                                \\ \hline
+HPC-C (24 threads)                                                      &                                                                &                                                                \\ \hline
+HPC-D (24 threads)                                                      & 11280.5                                                        & 46252.3                                                        \\ \hline
+\end{tabular}
+\end{table}

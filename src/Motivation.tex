@@ -1,0 +1,9 @@
+\section {Motivation}
+Node-aware all-to-all is a traditional method for optimize small message all-to-all.
+It include four steps: intra-node gather, local transpose, inter-node all-to-all, intra-node scatter.
+With the increase in the number of processor cores, multiple CPU cores, NUMA, network endpoints and inter-/intra-node overlapping brings huge parallelism.
+However, we notice that all traditional method do not take advantage of this parallelism optimize the four steps.
+For a 32/64 cores CPU, each inter-node message in node-aware method will be 1024/4096 times larger than direct method.
+If there is one double data between each pair of processes. There are 1024/4096 double data between each pair of nodes.
+As the single-core memory access bandwidth may not faster than the network bandwidth.
+Using a single core to gather/scatter/transpose data and initialize communication request may causing communication hotspot happend on a CPU core.
