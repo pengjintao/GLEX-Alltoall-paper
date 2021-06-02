@@ -7,3 +7,5 @@ For a 32/64 cores CPU, each inter-node message in node-aware method will be 1024
 If there is one double data between each pair of processes. There are 1024/4096 double data between each pair of nodes.
 As the single-core memory access bandwidth may not faster than the network bandwidth.
 Using a single core to gather/scatter/transpose data and initialize communication request may causing communication hotspot happend on a CPU core.
+
+Multiple CPU core can gather/scatter simutaneous using  MPI-RMA. This get faster message aggregation bandwidth.
