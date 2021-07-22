@@ -1,0 +1,50 @@
+\section {RDMA-based Segmented inter-node all-to-all (RDMASa2a)}
+
+For inter-node communication, our heuristic is that: "for a large message with size $m$, send it at once may slower than concurrently send two messages with size $\frac{m}{2}$".
+Our idea is breaking a large all-to-all into several concurrent medium all-to-all. 
+
+So, considering a multi-node all-to-all where one process on a node. RDMA-based RDMASa2a algorithm is shown in Algorithm \ref{RDMASa2a}:
+\begin{algorithm}
+\caption{Concurrent inter-node all-to-all}\label{RDMASa2a}
+M: slice size \\
+\SetKwProg{Def}{def}{:}{}
+\Def{RDMASa2a(sendbuf,recvbuf,sz)} 
+{
+	SliceCount $\leftarrow$ max($\frac{sz}{M}$,1) \\
+	StartShift $\leftarrow$ 0 \\
+	Make sure all communication request finished. \\
+	\For{i in range(0,SliceCount)}
+	{
+		len $\leftarrow$ M \\
+		\If {i == SliceCount-1}{len $\leftarrow$ sz - StartShift}
+		\For{j in range(0,p)}
+		{
+			target $\leftarrow$ (MyRank + i) mod procn \\
+			\If{target == MyRank}{Copy Data Directly}
+			\Else{
+				Init a RDMA\_Request req\\
+				\If{j == p - 1}{
+					req.flag $|$= GLEX\_FENCE \\
+					\If{i == SliceCount - 1}
+					{
+						req.flag $|$= LOCAL\_EVENT \\
+						req.flag $|$= REMOTE\_EVENT
+					}
+				}
+			}
+			RDMA\_Send(req)
+		}
+	}
+	Wait 2 events
+}
+\end{algorithm}
+In Algorithm \ref{RDMASa2a}, $M$ represent a message size of a all-to-all segment. $M$ is usually a medium message.
+In GLEX communication layer, there are three RDMA requests flag we need to introduce. GLEX\_FENCE, LOCAL\_EVENT and REMOTE\_EVENT.
+A RDMA request with a GLEX\_FENCE flag means that the network card will start the new request after all previous requests finished.
+A RDMA request with a LOCAL\_EVENT or REMOTE\_EVENT flag means that after this request finished, it produce a event at source/dest host.
+Sender or receiver may poll the event queue to make sure the message is complete.
+The overhead of GLEX\_FENCE is small but polling event queue will incur a lot of overhead.
+So we set GLEX\_FENCE flag every all-to-all segment But only use once  LOCAL\_EVENT and REMOTE\_EVENT to notify host that the messages finished.
+Compared to non-segmented all-to-all, RDMASa2a have the same event overhead.
+For MPI-based pair-wise all-to-all, where for each message, there are n-1 event for n processes.
+Compared to it RDMA-based pair-wise all-to-all or RDMASa2a has far less event overhead and avoid rendenzvous protocol overhead.

@@ -40,17 +40,22 @@ Especially for communication-intensive applications, their time-to-solution and 
 Message Passing Interface (MPI) provides a set of commonly used collective communication.
 MPI\_Alltoall is one of the collective communication where each process will send a different message to all processes.
 It is broadly used in some parallel applications like Fast Fourier Transform (FFT) \cite{mehta2021parallel} and some graph algorithms like MapReduce \cite{plimpton2011mapreduce} and Breadth-first search (BFS) \cite{ueno2012highly}.
-However, each time we double the processes, the all-to-all communication workload is quadrupled.
+However, each time we double the processes, the communication workload of all-to-all is quadrupled.
 On mordern supercomputers, network throughput has a linear relationship with the number of nodes.
-This brings great challenges to large-scale all-to-all communications.
+This brings great challenges to design large-scale all-to-all collectives.
 
-For multiple-core processes, an effective way is node-aware all-to-all method \cite{sistare1999optimization}.
-It's replace a N nodes global all-to-all into N-1 times intra-node gather + local transpose + inter-node transpose + N-1 times intra-node gather.
+For multiple-core supercomputers, an effective way is node-aware all-to-all method \cite{sistare1999optimization}.
+A p (p=N times M, M is \#processes on a node) processes all-to-all is replaeced by a N node inter-node all-to-all. Which is: N-1 times intra-node gather + local transpose + inter-node transpose + N-1 times intra-node gather.
 This method is very effective for small messages.
-Because, compared to original method, a node-aware all-to-all reduce the number of inter-node messages from $(M^N)^2$ to $N^2$ times (M is number of processers in each nodes).
-The size of the message is increased by $M^2$ times, which makes effective use of the network bandwidth.
-In the current supercomputer, a node has multiple CPU cores, NUMA and network endpoints.
-This architecture brings 4 kinds of parallism to optimize a node-aware all-to-all method:
+Because, compared to original method, a node-aware all-to-all reduce the number of inter-node messages from $(M^N)^2$ to $N^2$ times.
+The size of the message is increased by $M^2$ times, which can effective use of the network bandwidth.
+On the current supercomputer, there may be 20-64 CPU cores in a node.
+The single message size can be scaled 400-4096 times.
+In production environment, node-aware all-to-all may more efficient than Bruck's algorithm.
+
+
+However, the gathering/scattering overhead on node-aware all-to-all make it hard to be scaled to larger messages.
+Multiple CPU cores, NUMA and network endpoints brings 4 kinds of parallism to optimize a node-aware all-to-all method:
 \begin{enumerate}[(1)]
 \item Multiple network endpoints can simultaneously process multiple communication requests.
 \item Processes in different NUMA can simultaneously access it local memory without contention.
@@ -64,9 +69,9 @@ As we known, no methods combine these parallism togather to improve a node-aware
 % Two data copy needed to transer a intra-node message.
 % To reduce the memory copy times, kernel-assisted communication, shared heaps, and thread-based MPI are proposed.
 
-In this paper, we proposed a multi-leader node-aware all-to-all method.
-It using multiple leaders on different NUMA which open the different network endpoints to gather/scatter data, compose communication requests, and transpose local matrix.
-It explore the parallelism existing in mordern multi-core processor with NUMA memory architecture and multi-port network.
-For intra-node gather/sactter, we proposed a shared-heap-based remote accessible memory which similar to intra-node MPI RMA.
-Inter-node communication is based on Remote Direct Memory Access (RDMA) which provide high throughput and low latency.
-The results show that, compared to MPI\_alltoall, our implementation achieves up to 20x speedup and 4x speedup on average. 
+In this paper, we proposed Overlapped NUMA-aware Multi-port Multi-leader (ONMPML) method to scale the node-aware all-to-all collective.
+ONMPML using multiple leaders on different NUMA to gather/scatter data, compose communication requests, and transpose local matrix and open the different network endpoints to do inter-node all-to-all.
+ONMPML explore the parallelism existing in mordern multi-core processor with NUMA memory architecture and multi-port network.
+For intra-node gather/sactter, we implemented a shared-heap-based remote accessible memory to support multiple leader to gather/scatter simutaneously.
+Inter-node communication is implemented on Remote Direct Memory Access (RDMA) which provide high throughput and low latency.
+The results show that, compared to MPI\_alltoall, our implementation achieves up to 18x speedup and 4x speedup on average. 

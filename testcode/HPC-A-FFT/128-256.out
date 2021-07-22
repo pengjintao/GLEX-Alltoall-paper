@@ -1,0 +1,8 @@
+--------------MPI_Alltoall----------------------
+global vector size=8388608	alltoall time = 0.270292	MPIFFT_Gflops=3.87005
+global vector size=8388608	alltoall time = 0.237448	MPIFFT_Gflops=0.0126044
+global vector size=8388608	alltoall time = 0.204285	MPIFFT_Gflops=4.51612
+--------------GLEX_Alltoall----------------------
+global vector size=8388608	alltoall time = 0.109518	MPIFFT_Gflops=5.14376
+global vector size=8388608	alltoall time = 0.228426	MPIFFT_Gflops=4.34027
+global vector size=8388608	alltoall time = 0.228523	MPIFFT_Gflops=3.66293

@@ -1,0 +1,181 @@
+\section{Modeling the performance of all-to-all algorithms on multi-core supercomputer}
+
+In this section, we analyze the performance of traditional algorithms and our algorithms.
+We need a model which considering the effect of multiple core, NUMA, and network endpoints.
+For inter-node communication, we just using the classical logP model \cite{culler1993logp}.
+Classical intra-node communication model cannot meet our needs to model and anylyze our algorithms.
+We use the $\tau$-Lop \cite{rico2015tau} to model the intra-node communication.
+
+\subsection {The parameters of the model}
+In $\tau$-Lop \cite{rico2015tau}, there are several definition we need to use:
+\begin{enumerate}[(1)]
+\item $L(m,\tau)$ is cost to concurrently transfer $\tau$ messages with size m. There is a equation in $\tau$-Lop: 
+\begin{equation}
+\label{concurrently-p2p}
+\begin{split}
+L(m,1) \le L(m,A) \le A\times L(m,1)
+\end{split}
+\end{equation}
+It means that sending a message with size m is faster than concurrent sending $A$ messages with size m. 
+Concurrent sending $A$ messages with size m is faster than seperate sending A messages with size m.
+\item n is the number of data transfers time neededs to move from send buffer to the receive buffer. 
+For kernel-assistant or shared-heap-based intra-node communication, n equals to 1.
+Because a process can directly access other processes memory space, a process only need one copy to sending or receiving a message.
+For POSIX shared memory, n equals to 2.
+Because data on send buf has to be copied onto a shared buffer, then the receiving process copy the data from shared buffer to receive buffer.
+\item k, the number of segments the message is split into.
+\item o(m) is the time elapsed since the invoking of a message transmission operation until the beginning of data injection into the channel.
+\end{enumerate}
+The time to send a intra-node message with size m is:
+\begin{equation}
+\begin{split}
+T(m) = o(m) + \sum_{j=0}^{k+n-2}L_j(\frac{m}{k},\tau{_j})
+\end{split}
+\label{intra-p2p}
+\end{equation}
+In POSIX shared memory, where n = 2, equation \ref{intra-p2p} becomes:
+\begin{equation}
+\begin{split}
+T(m) = o(m) + 2L(S,1) + (k-1)L(S,2)
+\end{split}
+\label{real-p2p}
+\end{equation}
+
+When concurrently transer A messages, its overhead defined as $A||T(m)$, which is: 
+\begin{equation}
+\label{intra-concurentp2p}
+\begin{split}
+A||T(m)  = o(m) + \sum_{j=0}^{k+n-2}L_{j}(m,A\tau_j)
+\end{split}
+\end{equation}
+
+Through equation \ref{concurrently-p2p} and \ref{intra-concurentp2p}, we have:
+\begin{equation}
+\label{concurent-unequation}
+\begin{split}
+A||T(m)  \le A \times T(m) 
+\end{split}
+\end{equation}
+
+
+For inter-node communication, we using logP model.
+Some other definition we need are:
+\begin{enumerate}[(1)]
+\item M, the number of nodes.
+\item p, the total number of processes.
+\item ppn, the number of processes in each nodes.
+\item nn, the number of NUMAs in each nodes. 
+\item n1, the number of processes in a NUMA.
+\item ln, the number of leaders and network endpoints used in each nodes. We usually have $ln \le nn$.
+\item sz, the all-to-all message size between a pair of processes.
+\item $b'$, the thoughput of transposing a buffer. $b' * m$ is the overhead to transpose a buffer where its length is m.
+\end{enumerate}
+
+Beside, in order to ensure the consistency of the algorithms, assuming all intra-node gatering/scattering operations in L-a2a, MLMP, NMLMP, ONMLMP are based on direct algorithm.
+The inter-node alltoall are based on pairwise algorithm.
+\subsection {Overhead of direct pairwise all-to-all}
+
+Direct all-to-all takes p step to finish the communication.
+In step i, rank j send a message to rank (j+i) mod p and receive a message from rank (j+p-i) mod p.
+We consider the MPI rank is uniformly spreaded on the node.
+The overhead of first step where each processes send a message to themself is ignored. 
+For step 1, there is one outgoing message from a node.
+For step ppn, there are ppn  messages outgoing from a node.
+When p larger than ppn, there are still ppn messages outgoing from a node.
+If we consider the inter-node bandwidth is smaller than intra-node bandwidth, we have:
+The overhead of step i ($i < ppn$) is: $i\times L + o + i(sz-1)\times G + g$.
+The overhead of step i ($i \ge ppn$) is: $ppn\times L + o + ppn(sz-1)\times G + g$.
+As a result, the total overhead of direct all-to-all is:
+\begin{equation}
+\label{direct-all-to-all}
+\begin{split}
+T_{d-a2a}(sz)  & = 2*\sum_{i=1}^{ppn-1} (i\times L + o + i(sz-1)\times G + g) \\ 
+				 & + \sum_{i=1}^{p + 1 - 2ppn}(ppn\times L + o + ppn(sz-1)\times G  + g)  \\
+				 & = ppn \times (p - ppn) \times (L + G \times(sz - 1)) \\
+				 & + (p - 1)(o + g)  \\
+				 & \approx ppn \times (p - ppn) \times (L + G \times sz) + p\times(o+g)
+\end{split}
+\end{equation}
+
+\subsection {Overhead of leader-based all-to-all (L-a2a)}
+
+As we are considering direct Gather/Scatter algorithm, in $\tau$-lop, the overhead to gather/scatter one block is: $ppn||T(sz\times ppn)$.
+This means that, there are ppn concurent messages, the size of each message is $sz\times ppn$.
+As there are M blocks in a node, overhead to gather/scatter M blocks is: $M\times (ppn||T(sz\times ppn))$.
+The LogP overhead of inter-node pariwise all-to-all is: $(M-1) \times (L + o +(size - 1) \times G + g) \approx (M-1) \times (L + o +size\times G + g)$.
+Overall, the overhead of L-a2a is O(gather) + O(transpose) + O(inter-node alltoall) + O(scatter) which is :
+\begin{equation}
+\begin{split}
+T_{L-a2a}(sz) & = M\times (ppn||T(sz\times ppn)) \\
+			  & + M\times b'\times sz\times ppn\times ppn \\
+			  & + (M-1) (L + o +(sz\times ppn\times ppn - 1) \times G + g) \\
+			  & + M\times (ppn||T(sz\times ppn))  \\
+\end{split}
+\label{L-a2a-overhead}
+\end{equation}
+
+Compared to $T_{d-a2a}$, $T_{L-a2a}$ has same coeffient of G, which is the overhead on the network.
+L-a2a has a far less message number than d-a2a.
+But L-a2a incurs a lot gathering/scatering overhead.
+So, for small message and medium message, L-a2a may have performance improvement than d-a2a.
+
+\subsection {Overhead of  Multi-port Multi-leader a2a (MPML)}
+
+Compared to L-a2a, MPML using multiple process to do gatering, scattering, and transposing operation and using multiple enpoint to concurrently process communication request.
+For ppn processes in a node, the first ln processes are chosed to be leader.
+For local transpose overhead, the local transpose overhead are evently amortised on multiple pocesses.
+For gathering and scattering overhead, as these leaders are placed on a same NUMA, all leaders gathring procedure are concurrently processed.
+As for inter-node communication, MPML has lower overhead  of o and g than L-a2a because of using multiple network endpoint.
+
+% When assuming that the number of leader is less than the number of processes in a NUMA.
+So the overhead of MPML is:
+\begin{equation}
+\begin{split}
+T_{MPML}(sz) & = 2 \times \frac{M}{ln} \times ((ppn\times ln)||T(sz\times ppn)) \\
+			  & + \frac{M}{ln} \times b'\times sz\times ppn\times ppn \\
+			  & + (M-1)  (L + \frac{o}{ln} +(sz\times ppn\times ppn - 1) \times G + \frac{g}{ln})
+\end{split}
+\label{MPML-overhead}
+\end{equation}
+
+For gathering/scattering overhead, according to Equation \ref{concurent-unequation}, we have:
+$\frac{M}{ln} \times ((ppn\times ln)||T(sz\times ppn)) \le M\times (ppn||T(sz\times ppn))$.
+So, gathering/scattering overhead on MPML must be less than L-a2a according to $\tau$-lop model.
+The NUMA which the leaders placed on have the most memory access pressure than other NUMA.
+This lead to uneven memory access among different NUMA.
+
+\subsection {Overhead of NUMA-aware MPML all-to-all (NMPML) }
+In MPML, multiple leaders are contigously placed on the node. NMPML spread the leaders on the node.
+In MPML, it causing the NUMA which have most leaders placed on become the hostspot.
+When leaders are spreaded on the node, the gathering/scattering between different NUMA has less contention.
+The overhead of NMPML is:
+\begin{equation}
+\begin{split}
+T_{NMPML}(sz) & = 2 \times \frac{M}{ln} \times ((ppn + (ln - 1) \times n1)||T(sz\times ppn)) \\
+			  & + \frac{M}{ln} \times b'\times sz\times ppn\times ppn \\
+			  & + (M-1)  (L + \frac{o}{ln} +(sz\times ppn\times ppn - 1) \times G + \frac{g}{ln})
+\end{split}
+\label{NMPML-overhead}
+\end{equation}
+The only difference between MPML and NMPML is coeffient of $T(sz\times ppn))$.
+There are $ppn \times ln$ concurent message in a multi-eader gathering step of MPML, because all messages are placed on a same NUMA.
+For NMPML, in a multi-eader gathering step, there are $ppn + ln \times n1$ concurent messages on a NUMA.
+As $(ppn \times ln) - (ppn + (ln - 1)  \times n1) = ppn(ln - 1 - \frac{ln-1}{nn}) >= 0$, we have $T_{NMPML} \le T_{MPML}$.
+
+
+\subsection {Overhead of ONMPML}
+The ONMPML overlaps intra-node and inter-node overhead. 
+As long as a leader finished a gathering procedure, it immediately sends out the data and prepares next block.
+The first gathering and last transposing and scattering cannot be overlapped.
+So the overhead of ONMPML is:
+\begin{align*}
+  & T_{start} = ((ppn + (ln - 1) \times n1)||T(sz\times ppn)) \\
+  & T_{end}   = T_{start} + b'\times sz\times ppn\times ppn \\
+  & T_{inter} =  (M-1)  (L + \frac{o}{ln} +(sz\times ppn\times ppn - 1) \times G + \frac{g}{ln}) \\
+  & T_{intra} =   (2 \times \frac{M}{ln} - 1) \times ((ppn + (ln - 1) \times n1)||T(sz\times ppn)) \\
+  &	+(\frac{M}{ln} - 1) \times b'\times sz\times ppn\times ppn \\
+  & T_{ONMPML}(sz) = T_{start} + max(T_{inter},T_{intra}) + T_{end}
+\end{align*}
+\label{ONMPML-overhead}
+Notice  the $T_{NMPML}(sz) =  T_{start} + T_{inter} + T_{intra} + T_{end}$. 
+So $T_{NMPML}(sz) \ge T_{ONMPML}(sz) $.

@@ -1,21 +1,17 @@
 \section {Experimental Platforms}
-The methods in this paper are validated on four different systems:
+The methods in this paper are validated on two different systems:
 \begin{enumerate}[(1)]
-\item HPC-A: Matrix-2000+ CPU, Tianhe series network.
-\item HPC-B: FT-2000+ CPU, Tianhe series network.
-\item HPC-C: Intel E5 CPU, Tianhe series network. 
-\item HPC-D: E5-2692 v2 * 2, Tianhe series network. 
+\item HPC-A: Matrix-2000+ CPU on each node, Tianhe series network.
+\item HPC-B: E5-2692 v2 CPU * 2 on each node, Tianhe series network. 
 \end{enumerate}
-The Stream bandwidth test results are shown in the Table \ref{Memorybandwidth}.
-
+The memory bandwidth test (Stream) and network bandwidth test results are shown in the Table \ref{Memorybandwidth}.
 \begin{table*}[]
     \caption{Memory Bandwidth (tested on Stream) and Point-to-Point Bandwidth (tested on RDMA) of Experimental Platforms}\label{Memorybandwidth}
 \begin{tabular}{|l|c|c|c|c|c|c|c|}
 \hline
-\begin{tabular}[c]{@{}l@{}}Memory Bandwidth\\ tests (MB/s)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Copy\\ (Single-thread)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Copy\\ (Multi-threads)\end{tabular} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}NUMA \\ Count\end{tabular}} & \multicolumn{1}{l|}{loopback} & \multicolumn{1}{l|}{bi-loopback} & \multicolumn{1}{l|}{two-node-p2p} & \multicolumn{1}{l|}{two-node-bip2p} \\ \hline
-HPC-A (32 threads)                                                      & 6481                                                           & 21351                                                          & 4                                                                          & 1366                          & 1368                             & 1181                              & 1336                                \\ \hline
-HPC-B (32 threads)                                                      &                                                                &                                                                &                                                                            &                               &                                  &                                   &                                     \\ \hline
-HPC-C (24 threads)                                                      &                                                                &                                                                &                                                                            &                               &                                  &                                   &                                     \\ \hline
-HPC-D (24 threads)                                                      & 11280                                                          & 46252                                                          & 2                                                                          & 11530                         & 11568                            & 7089                              & 11629                               \\ \hline
+\begin{tabular}[c]{@{}l@{}}Bandwidth tests \\ (MB/s)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Copy\\ (Single-thread)\end{tabular} & \begin{tabular}[c]{@{}c@{}}Copy\\ (Multi-threads)\end{tabular} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}NUMA \\ Count\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}loopback \\ banwdith\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}bi-loopback \\ banwdith\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}two node p2p \\ banwdith\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}two node bip2p \\ banwdith\end{tabular}} \\ \hline
+HPC-A (32 cores)                                                      & 6481                                                           & 21351                                                          & 4                                                                          & 1366                          & 1368                             & 1181                              & 1336                                \\ \hline
+HPC-B (24 cores)                                                      & 11280                                                          & 46252                                                          & 2                                                                          & 11530                         & 11568                            & 7089                              & 11629                               \\ \hline
 \end{tabular}
 \end{table*}
+In table \ref{Memorybandwidth}, copy bandwidth is tested by STREAM. Loopback bandwidth means where sending process and receiving process is placed on a same node. Bi-loopback bandwidth is the bidirectional bandwidth of two processes on a same node.

@@ -1,0 +1,10 @@
+--------------MPI_Alltoall----------------------
+global vector size=-1806647296	alltoall time = 4.216890	MPIFFT_Gflops=165.816
+global vector size=-1806647296	alltoall time = 4.123895	MPIFFT_Gflops=177.896
+global vector size=-1806647296	alltoall time = 4.142296	MPIFFT_Gflops=174.148
+global vector size=-1806647296	alltoall time = 4.023966	MPIFFT_Gflops=175.447
+--------------GLEX_Alltoall----------------------
+global vector size=-1806647296	alltoall time = 0.715856	MPIFFT_Gflops=800.805
+global vector size=-1806647296	alltoall time = 0.610331	MPIFFT_Gflops=952.895
+global vector size=-1806647296	alltoall time = 0.611856	MPIFFT_Gflops=952.99
+global vector size=-1806647296	alltoall time = 0.609040	MPIFFT_Gflops=951.108

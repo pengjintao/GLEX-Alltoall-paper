@@ -1,13 +1,13 @@
 \section{Related Work}
 
-From an algorithm perspective: Bruck algorithm \cite{bruck1997efficient} is commonly used for small message all-to-all. For mid size messages, isend-irecv algorithm is used. For large messages, linear shift exchange \cite{ranka1994static}, pairwise exchange\cite{thakur2005optimization}.
+Bruck algorithm \cite{bruck1997efficient} is commonly used for small message all-to-all. For mid size messages, isend-irecv algorithm is used. Linear shift exchange \cite{ranka1994static}, pairwise exchange\cite{thakur2005optimization} apply to large messages.
 
 When considering the multi-core processors:  
 Cache-oblivious MPI all-to-all (SH-NUMA-CO) based on morton order is proposed to minimize the cache miss rate \cite{li2017cache}.
-For Infiniband and multi-core systems, a non-leader all-to-all collective (SA-orig) which based on shared memory aggregation techniques is proposed in \cite{kumar2008scaling}.
+For Infiniband on multi-core systems, a non-leader all-to-all collective (SA-orig) which based on shared memory aggregation techniques is proposed in \cite{kumar2008scaling}.
 For multi-rail QsNet SMP clusters, a shared memory and RDMA based all-to-all collectives (elan\_alltoall) is proposed in \cite{qian2008efficient}.
 For Intel Many Integrated Core (MIC) architecture,  the re-routing scheme based all-to-all collective (PAIRWISE-SLR/BRUCK-SLR) is proposed in \cite{venkatesh2014high}. 
-These works are direct related to our work. 
+As these works are all support leader-based aggreagation. 
 Table \ref{relatedworkcompare} shows the overall design-space comparation between these methods and our method.
 
 %我们用一个表格来展示这些方法和我们的方法的区别。
@@ -16,7 +16,7 @@ Table \ref{relatedworkcompare} shows the overall design-space comparation betwee
     \caption{Overall design-space for all-to-all collective on mulit-core processers}\label{relatedworkcompare}
     \begin{tabular}{|l|c|c|c|c|c|}
         \hline
-        Approach/Metric                  & \multicolumn{1}{l|}{SH-NUMA-CO} & \multicolumn{1}{l|}{SA-orig} & \multicolumn{1}{l|}{elan\_alltoall} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}PAIRWISE-SLR\\ and BRUCK-SLR\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}GLEX-Alltoall\\ (ours)\end{tabular}} \\ \hline
+        Approach/Metric                  & \multicolumn{1}{l|}{SH-NUMA-CO} & \multicolumn{1}{l|}{SA-orig} & \multicolumn{1}{l|}{elan\_alltoall} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}PAIRWISE-SLR\\ and BRUCK-SLR\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}ONMPML\\ (ours)\end{tabular}} \\ \hline
         inter-node implementation        & MVAPICH2                        & MVAPICH                      & RDMA                                & MPI-P2P                                                                                   & RDMA                                                                                             \\ \hline
         intra-node implementation        & Shared Heap                     & Shared Memory                & Shared Memory                       & MPI-P2P                                                                                   & Shared Heap                                                                                             \\ \hline
         Leader-based aggregation support & \ding{52}                        &\ding{52}                     &\ding{52}                            &\ding{52}                                                                                   &\ding{52}                                                                                                  \\ \hline
@@ -37,5 +37,7 @@ When considering the network topology: A bandwidth-optimal all-to-all exchange i
 For torus network, a large scale all-to-all is proposed for Blue Gene/L Supercomputer \cite{kumar2008optimization}.  
 A optimal schedule for all-to-all personalized communication is proposed for multiprocessor systems \cite{saha2019optimal}. 
 For Infiniband clusters, their is a topology aware all-to-all scheduler which lower the contention by adding extra communication steps \cite{subramoni2014designing}.
+A L-level hierarchy method which based on mapping of intensively communicating processes into the same computer nodes is proposed in \cite{kurnosov2016dynamic}. 
+A method which considering dynamic performance model of the network is proposed at \cite{cui2020communication}.
 
 

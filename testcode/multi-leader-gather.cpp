@@ -35,12 +35,14 @@ int main(int argc,char **argv)
 	leaderN = 8;
 
 	int msgsz = (1<<20);
-	int sz= msgsz*procn;
+	int sz= msgsz;
 	int buffer_sz = sizeof(double)*sz;
 
 	double * sendbuf = new double[sz];
-	double * recvbuf = new double[sz];
+	// double * recvbuf = new double[sz];
 	double * gather_buffer = 0;
+	leaderN = 8;
+	// if(comm_rank < 8 || am_i_leader(comm_rank))
 	{
 				// cout<<comm_rank<<" is a leader"<<endl;
 			gather_buffer = new double[sz];
@@ -60,8 +62,8 @@ int main(int argc,char **argv)
 			    MPI_Win win;
 			    MPI_Win_create(sendbuf, buffer_sz, 1, MPI_INFO_NULL, MPI_COMM_WORLD, &win);
 			    MPI_Win_fence(0, win);
-			    int loopN = 16384;
-			    if (i > 15) loopN = 512;
+			    int loopN = 4096;
+			    if (i > 14) loopN = 128;
 			    int realloop = loopN/leaderN;
 			    MPI_Barrier(MPI_COMM_WORLD);
 			    MPI_Barrier(MPI_COMM_WORLD);
@@ -74,10 +76,14 @@ int main(int argc,char **argv)
 			    		// cout<<comm_rank<<" ";
 			    		// if(0)
 			    		for(int xx = 0;xx<procn;xx++)
-
+			    		if(leader_mode == 0)
 				    	{
 				    		int target = (comm_rank + xx) % procn;
 				    		MPI_Get(gather_buffer,count,MPI_DOUBLE,target,0,count,MPI_DOUBLE,win);
+				    	}else{
+				    		int target = xx;
+				    		MPI_Get(gather_buffer,count,MPI_DOUBLE,target,0,count,MPI_DOUBLE,win);
+
 				    	}
 			    	}
 			    	MPI_Win_fence(0, win);
